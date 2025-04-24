@@ -56,6 +56,17 @@ This guide will help you set up and install the project dependencies using UV.
 - Ensure that you have the correct Python version set up in your environment.
 - If you encounter any issues with missing dependencies, check the `uv.lock` file to ensure all packages are listed and correctly specified.
 
+### Swagger UI
+Run server and check below path
+[http://localhost:8000/swagger/](http://localhost:8000/swagger/)
+
+### Redoc UI
+Run server and check below path
+[http://localhost:8000/redoc/](http://localhost:8000/redoc/)
+
+### Postman Collection
+Postman collection is added at project root
+
 ### Software Engineering Approach
 Below principles are taken into account:
 - [The Zen of Python](https://www.python.org/dev/peps/pep-0020/)

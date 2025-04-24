@@ -1,0 +1,738 @@
+{
+	"info": {
+		"_postman_id": "940d90c7-e1fb-4604-bf03-f6151a486d69",
+		"name": "tickethub",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "39631539"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "token",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"smit\",\r\n    \"password\": \"testuser\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/api/token/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"token",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "refresh token",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"refresh\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc0NTU1NTc0OSwiaWF0IjoxNzQ1NDY5MzQ5LCJqdGkiOiI2ZmFiM2Y1YTc2MGM0NjdmOTkxNTlmYmU0NWYxZThhZCIsInVzZXJfaWQiOjF9.c0JryPwm7vfeJipfNPwLE5N5_go6-gFKLxuPfP659KA\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/api/token/refresh/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"token",
+								"refresh",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "users",
+			"item": [
+				{
+					"name": "create user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"u8\",\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"password\": \"abcabcxyz\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/api/{{version}}/users/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"{{version}}",
+								"users",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "user profile",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"u8\",\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"first_name\": \"A\",\r\n    \"last_name\": \"Z\",\r\n    \"password\": \"abcabcxyza\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/api/{{version}}/users/me/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"{{version}}",
+								"users",
+								"me",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "user profile picture",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "profile_picture",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "{{domain}}/api/{{version}}/users/me/picture/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"{{version}}",
+								"users",
+								"me",
+								"picture",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Projects",
+			"item": [
+				{
+					"name": "Projects",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{domain}}/api/{{version}}/projects/?limit=10&offset=0&full_data=false",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"{{version}}",
+								"projects",
+								""
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								},
+								{
+									"key": "full_data",
+									"value": "false"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Projects",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Website Redesign U1\",\r\n    \"description\": \"U1's Project\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/api/{{version}}/projects/?limit=10&offset=0&status",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"{{version}}",
+								"projects",
+								""
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								},
+								{
+									"key": "status",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Invite members",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user\": \"906d541f-bcdf-4ee3-8569-7465056fa7be\",\r\n    \"project\": \"2850ce1e-3ecd-4237-93c0-3e521e79ea20\",\r\n    \"invited_by\": \"906d541f-bcdf-4ee3-8569-7465056fa7be\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/api/{{version}}/projects/invite/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"{{version}}",
+								"projects",
+								"invite",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "invite members",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user\": \"74d0ac10-9348-419b-a97d-17b7394b3435\",\r\n    \"project\": \"2850ce1e-3ecd-4237-93c0-3e521e79ea20\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/api/{{version}}/projects/invite/?invite_type=receiveds",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"{{version}}",
+								"projects",
+								"invite",
+								""
+							],
+							"query": [
+								{
+									"key": "invite_type",
+									"value": "receiveds"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "invite action",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/api/{{version}}/projects/invite/8b67cb5e-6eb2-4e54-929f-9872d08ad86d/action/reject/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"{{version}}",
+								"projects",
+								"invite",
+								"8b67cb5e-6eb2-4e54-929f-9872d08ad86d",
+								"action",
+								"reject",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tasks",
+			"item": [
+				{
+					"name": "task",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{domain}}/api/{{version}}/projects/2850ce1e-3ecd-4237-93c0-3e521e79ea20/tasks/?limit=10&offset=0",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"{{version}}",
+								"projects",
+								"2850ce1e-3ecd-4237-93c0-3e521e79ea20",
+								"tasks",
+								""
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "task",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Test\",\r\n    \"description\": \"NEW ***Task***\\r\\n\\r\\n```\\r\\nprint(\\\"test md\\\")\\r\\n```\\r\\n\\r\\n - 0\\r\\n - 1\\r\\n - 2\",\r\n    \"status\": \"TODO\",\r\n    \"project\": \"2850ce1e-3ecd-4237-93c0-3e521e79ea20\",\r\n    \"assignee\": \"67ad2634-2d66-412e-8929-af6de8d330ee\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/api/{{version}}/projects/2850ce1e-3ecd-4237-93c0-3e521e79ea20/tasks/?limit=10&offset=0&full_data=false",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"{{version}}",
+								"projects",
+								"2850ce1e-3ecd-4237-93c0-3e521e79ea20",
+								"tasks",
+								""
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								},
+								{
+									"key": "full_data",
+									"value": "false"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "task details",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"008c20a1-89a0-4d7e-9e93-30b4c239d620\",\r\n    \"created_at\": \"2025-04-24T09:01:34.807782Z\",\r\n    \"updated_at\": \"2025-04-24T12:56:56.457964Z\",\r\n    \"deleted_at\": null,\r\n    \"title\": \"Test\",\r\n    \"description\": \"NEW ***Task***\\r\\n\\r\\n```\\r\\nprint(\\\"test md\\\")\\r\\n```\\r\\n\\r\\n - 0\\r\\n - 1\\r\\n - 2\",\r\n    \"description_rendered\": \"\",\r\n    \"status\": \"TODO\",\r\n    \"due_date\": null,\r\n    \"project\": \"2850ce1e-3ecd-4237-93c0-3e521e79ea20\",\r\n    \"creator\": \"67ad2634-2d66-412e-8929-af6de8d330ee\",\r\n    \"assignee\": \"67ad2634-2d66-412e-8929-af6de8d330ee\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/api/{{version}}/projects/2850ce1e-3ecd-4237-93c0-3e521e79ea20/tasks/008c20a1-89a0-4d7e-9e93-30b4c239d620/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"{{version}}",
+								"projects",
+								"2850ce1e-3ecd-4237-93c0-3e521e79ea20",
+								"tasks",
+								"008c20a1-89a0-4d7e-9e93-30b4c239d620",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "task details",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"008c20a1-89a0-4d7e-9e93-30b4c239d620\",\r\n    \"created_at\": \"2025-04-24T09:01:34.807782Z\",\r\n    \"updated_at\": \"2025-04-24T13:14:36.711304Z\",\r\n    \"deleted_at\": null,\r\n    \"title\": \"Test\",\r\n    \"description\": \"NEW ***Task***\\r\\n\\r\\n```\\r\\nprint(\\\"test md\\\")\\r\\n```\\r\\n\\r\\n - 0\\r\\n - 1\\r\\n - 2 UPDATED\",\r\n    \"description_rendered\": \"\",\r\n    \"status\": \"DONE\",\r\n    \"due_date\": null,\r\n    \"project\": \"2850ce1e-3ecd-4237-93c0-3e521e79ea20\",\r\n    \"creator\": \"3a7b21b8-a78a-49d3-a62c-60a83c3857c7\",\r\n    \"assignee\": \"3a7b21b8-a78a-49d3-a62c-60a83c3857c7\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/api/{{version}}/projects/2850ce1e-3ecd-4237-93c0-3e521e79ea20/tasks/008c20a1-89a0-4d7e-9e93-30b4c239d620/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"{{version}}",
+								"projects",
+								"2850ce1e-3ecd-4237-93c0-3e521e79ea20",
+								"tasks",
+								"008c20a1-89a0-4d7e-9e93-30b4c239d620",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "task details Copy",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"008c20a1-89a0-4d7e-9e93-30b4c239d620\",\r\n    \"created_at\": \"2025-04-24T09:01:34.807782Z\",\r\n    \"updated_at\": \"2025-04-24T13:14:36.711304Z\",\r\n    \"deleted_at\": null,\r\n    \"title\": \"Test\",\r\n    \"description\": \"NEW ***Task***\\r\\n\\r\\n```\\r\\nprint(\\\"test md\\\")\\r\\n```\\r\\n\\r\\n - 0\\r\\n - 1\\r\\n - 2 UPDATED\",\r\n    \"description_rendered\": \"\",\r\n    \"status\": \"DONE\",\r\n    \"due_date\": null,\r\n    \"project\": \"2850ce1e-3ecd-4237-93c0-3e521e79ea20\",\r\n    \"creator\": \"3a7b21b8-a78a-49d3-a62c-60a83c3857c7\",\r\n    \"assignee\": \"3a7b21b8-a78a-49d3-a62c-60a83c3857c7\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/api/{{version}}/projects/2850ce1e-3ecd-4237-93c0-3e521e79ea20/tasks/008c20a1-89a0-4d7e-9e93-30b4c239d621/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"{{version}}",
+								"projects",
+								"2850ce1e-3ecd-4237-93c0-3e521e79ea20",
+								"tasks",
+								"008c20a1-89a0-4d7e-9e93-30b4c239d621",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Comment",
+			"item": [
+				{
+					"name": "comment",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{domain}}/api/{{version}}/projects/2850ce1e-3ecd-4237-93c0-3e521e79ea20/tasks/008c20a1-89a0-4d7e-9e93-30b4c239d620/comments/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"{{version}}",
+								"projects",
+								"2850ce1e-3ecd-4237-93c0-3e521e79ea20",
+								"tasks",
+								"008c20a1-89a0-4d7e-9e93-30b4c239d620",
+								"comments",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "comment Copy",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"c3763959-d7f0-4e69-891b-a4a7f0e69aab\",\r\n    \"created_at\": \"2025-04-24T14:04:31.364200Z\",\r\n    \"updated_at\": \"2025-04-24T14:04:46.645499Z\",\r\n    \"deleted_at\": null,\r\n    \"content\": \"sdfgsdgsdf 22 sdfs sdfsdf2\",\r\n    \"content_rendered\": \"\",\r\n    \"task\": \"008c20a1-89a0-4d7e-9e93-30b4c239d621\",\r\n    \"seen_by\": []\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/api/{{version}}/projects/2850ce1e-3ecd-4237-93c0-3e521e79ea20/tasks/008c20a1-89a0-4d7e-9e93-30b4c239d620/comments/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"{{version}}",
+								"projects",
+								"2850ce1e-3ecd-4237-93c0-3e521e79ea20",
+								"tasks",
+								"008c20a1-89a0-4d7e-9e93-30b4c239d620",
+								"comments",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "comment detail",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"c3763959-d7f0-4e69-891b-a4a7f0e69aab\",\r\n    \"created_at\": \"2025-04-24T14:04:31.364200Z\",\r\n    \"updated_at\": \"2025-04-24T14:04:46.645499Z\",\r\n    \"deleted_at\": null,\r\n    \"content\": \"sdfgsdgsdf 222\",\r\n    \"content_rendered\": \"\",\r\n    \"task\": \"008c20a1-89a0-4d7e-9e93-30b4c239d620\",\r\n    \"author\": \"67ad2634-2d66-412e-8929-af6de8d330ee\",\r\n    \"seen_by\": []\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/api/{{version}}/projects/2850ce1e-3ecd-4237-93c0-3e521e79ea20/tasks/008c20a1-89a0-4d7e-9e93-30b4c239d620/comments/3eaefa2f-02e2-45c0-81fc-b3de48dca234/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"{{version}}",
+								"projects",
+								"2850ce1e-3ecd-4237-93c0-3e521e79ea20",
+								"tasks",
+								"008c20a1-89a0-4d7e-9e93-30b4c239d620",
+								"comments",
+								"3eaefa2f-02e2-45c0-81fc-b3de48dca234",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "comment detail Copy",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"c3763959-d7f0-4e69-891b-a4a7f0e69aab\",\r\n    \"created_at\": \"2025-04-24T14:04:31.364200Z\",\r\n    \"updated_at\": \"2025-04-24T14:04:46.645499Z\",\r\n    \"deleted_at\": null,\r\n    \"content\": \"sdfgsdgsdf 222 343434 sdfsdf\",\r\n    \"content_rendered\": \"\",\r\n    \"task\": \"008c20a1-89a0-4d7e-9e93-30b4c239d620\",\r\n    \"author\": \"67ad2634-2d66-412e-8929-af6de8d330ee\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/api/{{version}}/projects/2850ce1e-3ecd-4237-93c0-3e521e79ea20/tasks/008c20a1-89a0-4d7e-9e93-30b4c239d620/comments/20ac26eb-14ab-4413-ac4a-6d9635ac31e6/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"{{version}}",
+								"projects",
+								"2850ce1e-3ecd-4237-93c0-3e521e79ea20",
+								"tasks",
+								"008c20a1-89a0-4d7e-9e93-30b4c239d620",
+								"comments",
+								"20ac26eb-14ab-4413-ac4a-6d9635ac31e6",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "domain",
+			"value": "http://localhost:8000",
+			"type": "string"
+		},
+		{
+			"key": "version",
+			"value": "v1",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ1NDg4MTk4LCJpYXQiOjE3NDU0ODc4OTgsImp0aSI6IjA5MGM2ZTc2ZjgxNjQ3YzQ4ZDI1YTM1NGUzZjVmNWIzIiwidXNlcl9pZCI6IjYwMDYxMjdlLTgyZDktNDg0YS05MmZjLTMwYzRiNjAyZDk1MCJ9.qfuGJF_Mu-8mNyfXcHe6JxONZ7gdeBx3Em_wMNp2gXY",
+			"type": "default"
+		}
+	]
+}
