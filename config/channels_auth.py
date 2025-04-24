@@ -1,20 +1,12 @@
 from channels.auth import AuthMiddlewareStack
 from rest_framework_simplejwt.tokens import AccessToken
-from django.contrib.auth.models import AnonymousUser # Import AnonymousUser
-from django.db import close_old_connections # Import close_old_connections
-from django.conf import settings # Import settings to get AUTH_USER_MODEL
-from urllib.parse import parse_qs # Import parse_qs to easily parse query string
+from django.contrib.auth.models import AnonymousUser
+from django.db import close_old_connections
+from django.conf import settings
+from urllib.parse import parse_qs
 from channels.db import database_sync_to_async
 
 from apps.common.models import CustomUser
-
-# Get the CustomUser model defined in your settings.AUTH_USER_MODEL
-# try:
-#     CustomUser = settings.AUTH_USER_MODEL
-# except AttributeError:
-#     # Fallback if AUTH_USER_MODEL is not set, though it should be for custom users
-#     from django.contrib.auth import get_user_model
-#     CustomUser = get_user_model()
 
 
 class JwtAuthMiddleware:
@@ -72,7 +64,6 @@ class JwtAuthMiddleware:
                 # - InvalidToken (from rest_framework_simplejwt)
                 # - CustomUser.DoesNotExist (if user_id in token doesn't exist)
                 # - KeyError (if 'user_id' claim is missing)
-                # You might want to log this error for debugging purposes.
                 print(f"JWT authentication failed in Channels middleware: {e}")
                 # Keep user as AnonymousUser if authentication fails
 

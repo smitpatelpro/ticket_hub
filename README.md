@@ -25,6 +25,7 @@ This guide will help you set up and install the project dependencies using UV.
    ```bash
    pip install uv
    ```
+   alternatively you can follow steps here: [https://docs.astral.sh/uv/getting-started/installation/](https://docs.astral.sh/uv/getting-started/installation/)
 
 3. **Install Project Dependencies**
 
@@ -33,7 +34,7 @@ This guide will help you set up and install the project dependencies using UV.
    ```bash
    uv sync
    ```
-   This will create a new virtual environment, make sure that you activate it before running project
+   This will create a new virtual environment (typically `.venv` directory), make sure that you activate it before running project
 
 4. **Run the Project**
 
