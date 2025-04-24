@@ -214,22 +214,7 @@ SIMPLE_JWT = {
 }
 AUTH_USER_MODEL = "common.CustomUser"
 
-
-# SPECTACULAR_SETTINGS = {
-#     "TITLE": "TicketHub API",
-#     "DESCRIPTION": "API documentation for TicketHub project",
-#     "VERSION": "1.0.0",
-#     "SERVE_INCLUDE_SCHEMA": False,
-
-#     # SIDECAR SETTINGS
-#     'SWAGGER_UI_DIST': 'SIDECAR',  # shorthand to use the sidecar instead
-#     'SWAGGER_UI_FAVICON_HREF': 'SIDECAR',
-#     'REDOC_DIST': 'SIDECAR',
-#     # OTHER SETTINGS
-# }
-
 SITE_URL = "https://example.com"  # Required for markdownfield
-
 
 CHANNEL_LAYERS = {
     "default": {
