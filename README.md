@@ -33,6 +33,7 @@ This guide will help you set up and install the project dependencies using UV.
    ```bash
    uv sync
    ```
+   This will create a new virtual environment, make sure that you activate it before running project
 
 4. **Run the Project**
 
@@ -40,6 +41,14 @@ This guide will help you set up and install the project dependencies using UV.
 
    ```bash
    python manage.py runserver
+   ```
+
+5. **Run the Test Cases**
+
+   After installing the dependencies, you can start the tests:
+
+   ```bash
+   python manage.py tests
    ```
 
 ### Additional Notes
@@ -73,3 +82,99 @@ The API will return errors in the following structure:
     ]
 }
 ```
+
+### Architecture Overview
+
+The TicketHub project leverages Django Channels to handle WebSocket connections, allowing for real-time features within the application. Below is an overview of the architecture:
+
+1. **Django Application**: 
+   - The core of the application, managing HTTP requests and responses, user authentication, and REST API endpoints using Django REST Framework.
+
+2. **Django Channels**:
+   - Adds support for handling WebSocket connections. Channels layers enable asynchronous communication, allowing the server to push updates to clients in real-time.
+
+3. **WebSocket Consumer**:
+   - Custom consumers are implemented to handle WebSocket connections. They define the actions to be taken when messages are received, sent, or connections are closed.
+
+4. **Channel Layers**:
+   - In-memory channel layers are configured for message passing between the consumer and other parts of the application. This can be replaced with a more robust solution like Redis for production.
+
+5. **Asynchronous Task Handling**:
+   - Tasks and events are processed asynchronously, enabling efficient handling of concurrent connections without blocking the main application thread.
+
+6. **Frontend Client**:
+   - The client establishes a WebSocket connection to receive real-time updates from the server. This could be a single-page application (SPA) using frameworks like React or Vue.js.
+
+### Sequence of Events
+
+1. **Client Connection**:
+   - A client initiates a WebSocket connection to the server. The server authenticates the client using Django's authentication mechanisms.
+
+2. **Message Handling**:
+   - The WebSocket consumer manages incoming messages, processes them, and communicates with other parts of the Django application as needed.
+
+3. **Real-Time Updates**:
+   - The server sends updates to connected clients through the WebSocket, ensuring they receive data in real-time without needing to refresh the page.
+
+4. **Disconnection**:
+   - When a client disconnects, the WebSocket consumer handles the event, performing any necessary cleanup.
+
+This architecture enables TicketHub to provide a responsive and interactive user experience, leveraging the power of Django Channels for real-time communication.
+
+### API Structure
+
+The TicketHub API is designed to provide a comprehensive and efficient interface for interacting with the TicketHub platform. Below is an overview of the API structure:
+
+1. **Authentication**:
+   - The API uses JWT (JSON Web Tokens) for authenticating requests. Clients must obtain a token by providing valid credentials and include it in the Authorization header of each request.
+
+2. **Endpoints**:
+   - **User Management**: Endpoints for user registration, login, profile management, and password reset.
+   - **Projects**: Manage projects, including creating, updating, listing, and deleting projects.
+   - **Tasks**: Endpoints to create, update, list, and delete tasks associated with projects.
+   - **Comments**: Allows users to add, update, and delete comments on tasks.
+
+3. **Versioning**:
+   - The API supports versioning to ensure backward compatibility. The current version is specified in the URL (e.g., `/api/v1/...`).
+
+4. **Error Handling**:
+   - Errors are returned in a consistent structure with a `detail` key providing a human-readable error message and a `code` key for programmatic handling.
+
+5. **Pagination**:
+   - List endpoints support pagination to handle large sets of data efficiently. The default pagination strategy is limit-offset.
+
+6. **Filtering**:
+   - Endpoints provide filtering options, allowing clients to tailor responses according to specific criteria.
+
+7. **Documentation**:
+   - The API is documented using OpenAPI, providing a comprehensive guide to available endpoints, request/response formats, and authentication requirements.
+
+This structure ensures that the TicketHub API is robust, flexible, and easy to use, providing a solid foundation for building applications that interact with the TicketHub platform.
+<!-- 
+### URL Patterns
+
+Example URL patterns for the TicketHub API:
+
+*   `GET /api/v1/users/`: List all users
+*   `POST /api/v1/users/`: Create a new user
+*   `GET /api/v1/users/{user_id}/`: Retrieve a user by ID
+*   `PATCH /api/v1/users/{user_id}/`: Update a user
+*   `DELETE /api/v1/users/{user_id}/`: Delete a user
+*   `GET /api/v1/projects/`: List all projects
+*   `POST /api/v1/projects/`: Create a new project
+*   `GET /api/v1/projects/{project_id}/`: Retrieve a project by ID
+*   `PATCH /api/v1/projects/{project_id}/`: Update a project
+*   `DELETE /api/v1/projects/{project_id}/`: Delete a project
+*   `POST /api/v1/projects/invite/{invite_id}/action/{action}/`
+*   `GET /api/v1/projects/{project_id}/tasks/`: List all tasks for a project
+*   `POST /api/v1/projects/{project_id}/tasks/`: Create a new task for a project
+*   `GET /api/v1/projects/{project_id}/tasks/{task_id}/`: Retrieve a task by ID
+*   `PATCH /api/v1/projects/{project_id}/tasks/{task_id}/`: Update a task
+*   `DELETE /api/v1/projects/{project_id}/tasks/{task_id}/`: Delete a task -->
+
+
+### Scope of Improvement
+- Test cases can be more comprehensive
+- Moving logic from view to serializers/model can prove beneficial
+- Scope of improvement in websocket handlers
+- APIs are some what optimized for performance, but can be improved further

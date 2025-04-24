@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "markdownfield",
+    "drf_yasg",
     # "drf_spectacular",  # OpenAPI schema generation
     # "drf_spectacular_sidecar",  # required for Django collectstatic discovery
     # Custom apps
@@ -65,10 +66,10 @@ MIDDLEWARE = [
 
 if DEBUG:
     MIDDLEWARE += [
-        'silk.middleware.SilkyMiddleware',
+        "silk.middleware.SilkyMiddleware",
     ]
     INSTALLED_APPS += [
-        'silk',
+        "silk",
     ]
 
 ROOT_URLCONF = "config.urls"
@@ -232,6 +233,6 @@ SITE_URL = "https://example.com"  # Required for markdownfield
 
 CHANNEL_LAYERS = {
     "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer" # Used for simplicity and save time
+        "BACKEND": "channels.layers.InMemoryChannelLayer"  # Used for simplicity and save time
     }
 }

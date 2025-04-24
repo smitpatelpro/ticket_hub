@@ -22,6 +22,9 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 from django.conf import settings
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -38,6 +41,25 @@ urlpatterns = [
     # But, We also have support for View level versioning, so you can use the same View for different versions of the API.
     # path('api/<str:version>/projects/', include('apps.v1.projects.urls', namespace='projects')),
     # path('api/<str:version>/projects/', include('apps.v1.projects.urls', namespace='projects')),
+]
+
+# Configure and add Swagger UI and Redoc Paths
+schema_view = get_schema_view(
+   openapi.Info(
+      title="TicketHub Project API",
+      default_version='v1',
+      description="Jira Like API",
+      terms_of_service="",
+      contact=openapi.Contact(email="contact@snippets.local"),
+      license=openapi.License(name="BSD License"),
+   ),
+   public=True,
+   permission_classes=(permissions.AllowAny,),
+)
+urlpatterns += [
+   path('swagger.<format>/', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+   path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+   path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]
 
 if settings.DEBUG:

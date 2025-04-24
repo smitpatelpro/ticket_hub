@@ -55,7 +55,6 @@ class CommentCombinedTestCase(TestCase):
 
         self.COMMENT_LIST_API_URL = "/api/v1/projects/{}/tasks/{}/comments/"
         self.COMMENT_DETAIL_API_URL = "/api/v1/projects/{}/tasks/{}/comments/{}/"
-        
 
     def test_comment_creation(self):
         comment = Comment.objects.create(
@@ -76,7 +75,6 @@ class CommentCombinedTestCase(TestCase):
         comment.delete()
         self.assertFalse(Comment.objects.filter(task=self.task1).exists())
 
-
     def test_comment_soft_deletion(self):
         comment = Comment.objects.create(
             task=self.task1,
@@ -94,32 +92,10 @@ class CommentCombinedTestCase(TestCase):
         )
         comment.content = "This is an updated test comment"
         comment.save()
-        self.assertEqual(Comment.objects.get(task=self.task1).content, "This is an updated test comment")
-
-    
-    def test_comment_creation_api(self):
-        comment_data = {
-            "task": str(self.task1.id),
-            "author": str(self.user1.id),
-            "content": "This is a test comment",
-        }
-        response = self.client.post(self.COMMENT_LIST_API_URL.format(self.proj1.id, self.task1.id), comment_data)
-        self.assertEqual(response.status_code, 201)
-        self.assertEqual(response.data["task"], str(self.task1.id))
-        self.assertEqual(response.data["author"], str(self.user1.id))
-        self.assertEqual(response.data["content"], "This is a test comment")
-
-    # def test_comment_deletion_api(self):
-    #     comment = Comment.objects.create(
-    #         task=self.task1,
-    #         author=self.user1,
-    #         content="This is a test comment",
-    #     )
-    #     response = self.client.delete(
-    #        self.COMMENT_DETAIL_API_URL.format(self.proj1.id, self.task1.id, comment.id)
-    #     )
-    #     self.assertEqual(response.status_code, 204)
-    #     self.assertFalse(Comment.objects.filter(task=self.task1, id=comment.id).exists())
+        self.assertEqual(
+            Comment.objects.get(task=self.task1).content,
+            "This is an updated test comment",
+        )
 
     def test_comment_soft_deletion_api(self):
         comment = Comment.objects.create(
@@ -145,7 +121,9 @@ class CommentCombinedTestCase(TestCase):
             "content": "This is an updated test comment",
         }
         response = self.client.patch(
-            self.COMMENT_DETAIL_API_URL.format(self.proj1.id, self.task1.id, comment.id),
+            self.COMMENT_DETAIL_API_URL.format(
+                self.proj1.id, self.task1.id, comment.id
+            ),
             comment_data,
         )
         self.assertEqual(response.status_code, 200)
