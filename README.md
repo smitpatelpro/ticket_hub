@@ -100,6 +100,9 @@ Run server and check below path
 ### Postman Collection
 Postman collection is added at project root
 
+### API Performance Profiling GUI using Silk
+[http://localhost:8000/silk/](http://localhost:8000/silk/)
+
 ### Software Engineering Approach
 Below principles are taken into account:
 - [The Zen of Python](https://www.python.org/dev/peps/pep-0020/)
@@ -127,8 +130,14 @@ The API will return errors in the following structure:
 }
 ```
 
-### Architecture Overview
+## Architecture Overview
+### Key Architecture Decisions
+- UUID is used as primary key for all models
+- Priority was to have minimal changes in built in Django features as per requirements to avoid unnecessary clutter and over-engineering
+- Some effort is done to Avoid N+1 Query problem in APIs and Serializers
+- 
 
+### ***Realtime updates***
 The TicketHub project leverages Django Channels to handle WebSocket connections, allowing for real-time features within the application. Below is an overview of the architecture:
 
 1. **Django Application**: 
@@ -194,27 +203,8 @@ The TicketHub API is designed to provide a comprehensive and efficient interface
    - The API is documented using OpenAPI, providing a comprehensive guide to available endpoints, request/response formats, and authentication requirements.
 
 This structure ensures that the TicketHub API is robust, flexible, and easy to use, providing a solid foundation for building applications that interact with the TicketHub platform.
-<!-- 
-### URL Patterns
 
-Example URL patterns for the TicketHub API:
-
-*   `GET /api/v1/users/`: List all users
-*   `POST /api/v1/users/`: Create a new user
-*   `GET /api/v1/users/{user_id}/`: Retrieve a user by ID
-*   `PATCH /api/v1/users/{user_id}/`: Update a user
-*   `DELETE /api/v1/users/{user_id}/`: Delete a user
-*   `GET /api/v1/projects/`: List all projects
-*   `POST /api/v1/projects/`: Create a new project
-*   `GET /api/v1/projects/{project_id}/`: Retrieve a project by ID
-*   `PATCH /api/v1/projects/{project_id}/`: Update a project
-*   `DELETE /api/v1/projects/{project_id}/`: Delete a project
-*   `POST /api/v1/projects/invite/{invite_id}/action/{action}/`
-*   `GET /api/v1/projects/{project_id}/tasks/`: List all tasks for a project
-*   `POST /api/v1/projects/{project_id}/tasks/`: Create a new task for a project
-*   `GET /api/v1/projects/{project_id}/tasks/{task_id}/`: Retrieve a task by ID
-*   `PATCH /api/v1/projects/{project_id}/tasks/{task_id}/`: Update a task
-*   `DELETE /api/v1/projects/{project_id}/tasks/{task_id}/`: Delete a task -->
+<!-- ### User Invite Mechanism -->
 
 
 ### Scope of Improvement
