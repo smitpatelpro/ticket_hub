@@ -4,20 +4,47 @@ from apps.common.models import BaseModel
 from apps.common.models import CustomUser
 
 
-# Create your models here.
+# ========================================
+# Model Managers
+# ========================================
+class ProjectManager(models.Manager):
+    def active(self):
+        return super().get_queryset().filter(status=Project.ProjectStatus.ACTIVE)
+
+    def existing(self):
+        return super().get_queryset().filter(deleted_at__isnull=True)
+
+
+# ========================================
+# Models
+# ========================================
 class Project(BaseModel):
     """
     Represents a project within the platform.
     """
 
-    title = models.CharField(max_length=255)
+    class ProjectStatus(models.TextChoices):
+        ACTIVE = "ACTIVE", "Active"
+        ARCHIVED = "ARCHIVED", "Archived"
+
+    title = models.CharField(max_length=255, unique=True)
+    description = models.TextField(blank=True, null=True)
+    status = models.CharField(
+        max_length=20, choices=ProjectStatus.choices, default=ProjectStatus.ACTIVE
+    )
     members = models.ManyToManyField(
         CustomUser, through="ProjectMembership", related_name="projects"
     )
 
+    objects = ProjectManager()  # Custom manager to filter active projects
+
     def __str__(self):
         return self.title
 
+    def soft_delete(self, save=True):
+        self.deleted_at = timezone.now()
+        if save:
+            self.save(update_fields=["deleted_at"])
 
 class ProjectMembership(BaseModel):
     """
@@ -25,6 +52,7 @@ class ProjectMembership(BaseModel):
     """
 
     class ProjectRole(models.TextChoices):
+        OWNER = "OWNER", "OWNER"
         ADMIN = "ADMIN", "Admin"
         MEMBER = "MEMBER", "Member"
 
@@ -72,10 +100,9 @@ class ProjectInvitation(BaseModel):
         REJECTED = "REJECTED", "Rejected"
         CANCELLED = "CANCELLED", "Cancelled"
 
-    # The user who is being invited.
     # Note: This could be a ForeignKey to User if the user must exist to be invited,
     # or you might store an email if inviting users who don't yet have an account.
-    # For simplicity here, assuming inviting existing users.
+    # For simplicity here, we are assuming inviting users with existing account.
     user = models.ForeignKey(
         CustomUser, on_delete=models.CASCADE, related_name="project_invitations"
     )
@@ -88,7 +115,10 @@ class ProjectInvitation(BaseModel):
         default=ProjectMembership.ProjectRole.MEMBER,
     )
     invited_by = models.ForeignKey(
-        CustomUser, on_delete=models.SET_NULL, null=True, related_name="sent_invitations"
+        CustomUser,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="sent_invitations",
     )  # Who sent the invitation
 
     invitation_status = models.CharField(
@@ -101,13 +131,8 @@ class ProjectInvitation(BaseModel):
         null=True, blank=True
     )  # Timestamp when the user accepted or rejected
 
-    class Meta:
-        # A user can have only one PENDING invitation for a given project at a time
-        unique_together = (
-            "user",
-            "project",
-            "invitation_status",
-        )  # Consider this constraint carefully based on exact requirements
+    # class Meta:
+    #     unique_together = ()
 
     def __str__(self):
         return f"Invitation for {self.user.username} to join {self.project.title} (Status: {self.invitation_status})"
@@ -115,10 +140,17 @@ class ProjectInvitation(BaseModel):
     def accept(self):
         if self.invitation_status == self.InvitationStatus.PENDING:
             # Create the active membership
-            ProjectMembership.objects.create(user=self.user, project=self.project)
+            membership = ProjectMembership.objects.create(
+                user=self.user,
+                project=self.project,
+                date_joined=timezone.now(),
+                status=ProjectMembership.MembershipStatus.ACTIVE,
+                role=self.role,
+            )
             self.invitation_status = self.InvitationStatus.ACCEPTED
             self.responded_at = timezone.now()
-            self.save()
+            self.save(update_fields=["invitation_status", "responded_at"])
+            return membership
 
     def reject(self):
         if self.invitation_status == self.InvitationStatus.PENDING:

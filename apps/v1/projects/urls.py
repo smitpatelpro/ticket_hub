@@ -4,8 +4,11 @@ from . import views
 app_name = "projects"
 
 urlpatterns = [
-    # Define your app-specific URL patterns here
-    path('', views.HelloView.as_view(), name='hello'),
-    # Add more paths as needed
+    path("", views.ProjectListView.as_view(), name="project_list"),
+    path("invite/", views.InviteProjectMemberListView.as_view(), name="invite_member"),
+    path(
+        "invite/<uuid:invite_id>/action/<str:action>/",
+        views.InviteActionView.as_view(),
+        name="invite_member_action",
+    ),
 ]
-

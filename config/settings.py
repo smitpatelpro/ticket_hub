@@ -17,6 +17,7 @@ from decouple import config
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+ASGI_APPLICATION = "config.asgi.application"
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
@@ -33,6 +34,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -43,8 +45,8 @@ INSTALLED_APPS = [
     "markdownfield",
     # "drf_spectacular",  # OpenAPI schema generation
     # "drf_spectacular_sidecar",  # required for Django collectstatic discovery
-    
     # Custom apps
+    "apps.v1.userprofile",
     "apps.v1.projects",
     "apps.v1.comments",
     "apps.v1.tasks",
@@ -60,6 +62,14 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+if DEBUG:
+    MIDDLEWARE += [
+        'silk.middleware.SilkyMiddleware',
+    ]
+    INSTALLED_APPS += [
+        'silk',
+    ]
 
 ROOT_URLCONF = "config.urls"
 
@@ -151,14 +161,24 @@ REST_FRAMEWORK = {
     # Optional: Define a default version if needed for requests
     # that might somehow bypass the versioned URL (less common with URLPathVersioning)
     # 'DEFAULT_VERSION': 'v1',
-    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    # "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_RENDERER_CLASSES": [
+        "rest_framework.renderers.JSONRenderer",
+        # You can keep BrowsableAPIRenderer if you still want the HTML interface
+        # but place JSONRenderer first to prioritize JSON for API clients.
+        "rest_framework.renderers.BrowsableAPIRenderer",
+    ],
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
 }
 
 STATIC_ROOT = BASE_DIR / "static"
 MEDIA_ROOT = BASE_DIR / "media"
 
+STATIC_URL = "static/"
+MEDIA_URL = "media/"
+
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=20),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     "ROTATE_REFRESH_TOKENS": False,
     "BLACKLIST_AFTER_ROTATION": False,
@@ -208,3 +228,10 @@ AUTH_USER_MODEL = "common.CustomUser"
 # }
 
 SITE_URL = "https://example.com"  # Required for markdownfield
+
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer" # Used for simplicity and save time
+    }
+}

@@ -3,10 +3,14 @@ from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import gettext_lazy as _
 from apps.common.models import CustomUser
 
+
 class CustomUserAdmin(UserAdmin):
     fieldsets = (
         (None, {"fields": ("username", "password")}),
-        (_("Personal info"), {"fields": ("email", "first_name", "last_name", "profile_picture")}),
+        (
+            _("Personal info"),
+            {"fields": ("email", "first_name", "last_name", "profile_picture")},
+        ),
         (
             _("Permissions"),
             {
@@ -21,5 +25,6 @@ class CustomUserAdmin(UserAdmin):
         ),
         (_("Important dates"), {"fields": ("last_login", "date_joined")}),
     )
-    
+
+
 admin.site.register(CustomUser, CustomUserAdmin)
