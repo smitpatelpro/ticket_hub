@@ -82,7 +82,7 @@ This guide will help you set up and install the project dependencies using UV.
 
 ### Additional Notes
 
-- Ensure that you have the correct Python version set up in your environment.
+- `Python 3.12` is used during development. Ensure that you have the correct Python version set up in your environment.
 - If you encounter any issues with missing dependencies, check the `uv.lock` file to ensure all packages are listed and correctly specified.
 - SQLite DB and Inmemory Channel Layers are used for fast development. for production environment, we can easily switch to Sophisticated solutions like PostgreSQL and Redis and these secrets will be added into `.env` file
 - Silk profiler is used to measure API DB calls and relative response time
@@ -134,10 +134,46 @@ The API will return errors in the following structure:
 
 ## Architecture Overview
 ### Key Architecture Decisions
-- UUID is used as primary key for all models
-- Priority was to have minimal changes in built in Django features as per requirements to avoid unnecessary clutter and over-engineering
-- Some effort is done to Avoid N+1 Query problem in APIs and Serializers
-- 
+1. **DB Design decisions**
+   - UUID is used as primary key for all models
+   - Some efforts are made to Avoid N+1 Query problem in APIs and Serializers
+
+2. **API Design**
+   - APIs are very much compliant with REST API conventions
+   - Priority was to have minimal changes in built in Django features as per requirements to avoid unnecessary clutter and over-engineering
+   - User Invite flow is implemented using separate DB table and invitations can be accepted by user using UUID received from Email/APIs
+   - Attempt is made to limit number of APIs and single API can give both full and lite response
+      - for example, `full_data=false` can be used to control data details in `/api/v1/projects/` API
+
+3. **Pagination**
+   - Limit offset pagination is used to have most flexible pagination setup. It can be fully controlled by client.
+   - Limit offset pagination is enabled project wide. So, it can be applied to any API using query params `?limit=20&offset=0`
+
+4. **File Uploads**
+   - The User profile image update is implemented using dedicated API endpoint supporting multipart/formdata
+   - The reason for choosing multipart/formdata or base64 encoding is better scalability with larger file size.
+   - Also, separate API aligns well with UI integration where profile image update is generally done in separate API call
+
+1. **Authentication**
+   - JWT based auth is implemented with support for both access and refresh tokens
+   - Access token are very short lived (20 min) and refresh tokens are valid for 1 day for balanced security and user experience
+
+5. **Test Cases**
+   - Both Unit and Integration tests are implemented
+   - Due to time limitation, coverage of test cases might not be great
+
+5. **Optional Features**
+   - Soft delete is implemented
+   - filtering support is implemented for some APIs
+   - Project level roles are provisioned, but access control is not implemented
+
+6. **Real-time Features**
+   - Realtime updates are implemented using Web Sockets with Django channels
+   - The APIs can send event messages to project groups which are broadcasted to clients
+   - clients can also send activity updates to server
+
+
+
 
 ### ***Realtime updates***
 The TicketHub project leverages Django Channels to handle WebSocket connections, allowing for real-time features within the application. Below is an overview of the architecture:
@@ -214,3 +250,4 @@ This structure ensures that the TicketHub API is robust, flexible, and easy to u
 - Moving logic from view to serializers/model can prove beneficial
 - Scope of improvement in websocket handlers
 - APIs are some what optimized for performance, but can be improved further
+- DRF permission classes can be defined for better and cleaner authorization
