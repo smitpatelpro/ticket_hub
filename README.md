@@ -85,6 +85,8 @@ This guide will help you set up and install the project dependencies using UV.
 - Ensure that you have the correct Python version set up in your environment.
 - If you encounter any issues with missing dependencies, check the `uv.lock` file to ensure all packages are listed and correctly specified.
 - SQLite DB and Inmemory Channel Layers are used for fast development. for production environment, we can easily switch to Sophisticated solutions like PostgreSQL and Redis and these secrets will be added into `.env` file
+- Silk profiler is used to measure API DB calls and relative response time
+- Web Socket based Django channels is implemented for realtime updates
 
 ### Django Admin
 [http://localhost:8000/admin](http://localhost:8000/admin)
