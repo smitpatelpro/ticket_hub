@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "django>=5.2",
+    "django-markdownfield>=0.11.0",
     "djangorestframework>=3.16.0",
     "djangorestframework-simplejwt>=5.5.0",
     "markdown>=3.8",

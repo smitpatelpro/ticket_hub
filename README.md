@@ -52,6 +52,7 @@ Below principles are taken into account:
 - [The Zen of Python](https://www.python.org/dev/peps/pep-0020/)
 - [DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself)
 - [The Best Code is No Code At All](https://blog.codinghorror.com/the-best-code-is-no-code-at-all/)
+- [Keep it simple, stupid!](https://en.wikipedia.org/wiki/KISS_principle)
 
 ### Error Response Structure
 NOTE: This is default DRF response structure
