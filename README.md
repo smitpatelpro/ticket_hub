@@ -36,7 +36,11 @@ This guide will help you set up and install the project dependencies using UV.
    ```
    This will create a new virtual environment (typically `.venv` directory), make sure that you activate it before running project
 
-4. **migrate DB**
+4. **Prepare .env file from .env.example file**
+
+   Copy `.env.example` file and create `.env` file and update secrets
+
+5. **migrate DB**
 
    After installing the dependencies, you can start the project:
 
@@ -44,7 +48,7 @@ This guide will help you set up and install the project dependencies using UV.
    python manage.py migrate
    ```
 
-5. **Collect static files**
+6. **Collect static files**
 
    After installing the dependencies, you can start the project:
 
@@ -52,7 +56,7 @@ This guide will help you set up and install the project dependencies using UV.
    python manage.py collectstatic
    ```
 
-6. **Create super user for admin access**
+7. **Create super user for admin access**
 
    After installing the dependencies, you can start the project:
 
@@ -60,7 +64,7 @@ This guide will help you set up and install the project dependencies using UV.
    python manage.py createsuperuser
    ```
 
-7. **Run the Project**
+8. **Run the Project**
 
    After installing the dependencies, you can start the project:
 
@@ -68,7 +72,7 @@ This guide will help you set up and install the project dependencies using UV.
    python manage.py runserver
    ```
 
-8. **Run the Test Cases**
+9. **Run the Test Cases**
 
    After installing the dependencies, you can start the tests:
 
@@ -80,6 +84,7 @@ This guide will help you set up and install the project dependencies using UV.
 
 - Ensure that you have the correct Python version set up in your environment.
 - If you encounter any issues with missing dependencies, check the `uv.lock` file to ensure all packages are listed and correctly specified.
+- SQLite DB and Inmemory Channel Layers are used for fast development. for production environment, we can easily switch to Sophisticated solutions like PostgreSQL and Redis and these secrets will be added into `.env` file
 
 ### Django Admin
 [http://localhost:8000/admin](http://localhost:8000/admin)
